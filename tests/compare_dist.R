@@ -69,7 +69,7 @@ LoadContext <- function(prefix_case) {
   ctx
 }
 
-RunRappor <- function(prefix_case, prefix_instance, ctx) {
+RunRappor <- function(prefix_case, prefix_instance, ctx, outdir) {
   # Reads counts, map files, runs RAPPOR analysis engine.
   # Args:
   #    prefix_case: path prefix to the test case, e.g., '_tmp/exp'
@@ -99,6 +99,8 @@ RunRappor <- function(prefix_case, prefix_instance, ctx) {
 
   Log("Decoded results:")
   str(res$fit)
+  filename <- file.path(outdir, 'dist.csv')
+  write.csv(res$fit, file = filename)
 
   res$fit
 }
@@ -249,7 +251,7 @@ main <- function(parsed) {
   # takes 500 ms or so (as measured by system.time).
 
   ctx <- LoadContext(input_case_prefix)
-  ctx$rappor <- RunRappor(input_case_prefix, input_instance_prefix, ctx)
+  ctx$rappor <- RunRappor(input_case_prefix, input_instance_prefix, ctx, output_dir)
   ctx$actual <- LoadActual(input_instance_prefix)
 
   d <- CompareRapporVsActual(ctx)
